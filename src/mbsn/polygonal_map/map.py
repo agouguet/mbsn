@@ -7,7 +7,8 @@ import yaml
 import cv2
 from PIL import Image
 from numpy import asarray
-from importlib.resources import files
+# from importlib.resources import files
+from importlib_resources import files
 
 from .py_floor_plan_segmenter.modules import do_segment
 

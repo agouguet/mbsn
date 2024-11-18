@@ -3,7 +3,6 @@ import os
 import random
 import sys
 import time
-from importlib.resources import files
 
 import matplotlib
 from matplotlib import pyplot as plt
@@ -26,6 +25,7 @@ from mbsn.robot_human_environment.pygame_window import Window
 
 
 scenario = "small"
+scenario = "/home/adam/workspace/robulab/tmux/ros2_nav"
 map = PolygonalMap(scenario, type="hexagon", area_minimum=0.1)
 robot_position = Point(0, 5)
 goal_position = Point(0, -5)
@@ -76,7 +76,7 @@ while robot.position != goal_position:
 
         # ACTION CHOICE
         # action = random.choice(mbsn.get_actions(state)) # Random
-        action = heuristic_score_based(mbsn, state, goal=mbsn_goal, debug=True, w2=5) # Heuristic
+        action = heuristic_score_based(mbsn, state, goal=mbsn_goal, debug=False, w2=5) # Heuristic
 
         # solver = MBSNAgentMCTS(mbsn, qfunction, bandit, heuristic_function=heuristic_score_based) # MCTS
         # root_node, num_rollouts = solver.mcts(state, timeout=1.0)

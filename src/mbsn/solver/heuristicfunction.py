@@ -60,7 +60,7 @@ def astar(start, goal, mdp, limited_action_of_start_state=None):
                 g_score[neighbor] = tentative_g_score
                 f_score[neighbor] = tentative_g_score + heuristic(neighbor, goal)
                 heapq.heappush(open_set, (f_score[neighbor], neighbor))
-    print(f_score)
+    print("A* ", f_score)
     return None  # Aucun chemin trouvé
 
 def closest_to_goal(mdp, state, goal, limited_action_of_start_state=None):

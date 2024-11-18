@@ -1,5 +1,5 @@
 from collections import defaultdict
-from importlib.resources import files
+# from importlib.resources import files
 from math import ceil, cos, radians, sin, sqrt
 import matplotlib
 from matplotlib import pyplot as plt
@@ -15,7 +15,7 @@ POURCENTAGE_AREA_OF_POLYGON_ACCEPTABLE = 0.3
 class PolygonalMap(Map, Polygon):
 
     def __init__(self, map, type='hexagon', polygon_size=0.5, area_minimum = POURCENTAGE_AREA_OF_POLYGON_ACCEPTABLE):
-        Map.__init__(self, self.map_name_to_map_path(map))
+        Map.__init__(self, map)
         self._polygon = None
         self._grid = None
         self._type = type
@@ -30,7 +30,7 @@ class PolygonalMap(Map, Polygon):
     def map_name_to_map_path(self, map_name):
         if "\\" in map_name or "/" in map_name:
             return map_name
-        return str(files('mbsn.data').joinpath(map_name+'/'))
+        # return str(files('mbsn.data').joinpath(map_name+'/'))
 
     @property
     def polygon(self):

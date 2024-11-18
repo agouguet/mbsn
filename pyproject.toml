@@ -11,9 +11,9 @@ authors = [
   { name="Adam Gouguet", email="adam.gouguet@imt-nord-europe.fr" },
 ]
 description = "MDP-Based Social Navigation"
-dependencies = []
+dependencies = ["pyyaml", "opencv-python", "matplotlib", "shapely", "pygame", "torch", "scipy", "scikit-image", "sortedcontainers", "flatdict"]
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.0"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
