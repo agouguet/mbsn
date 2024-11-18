@@ -6,6 +6,7 @@ import time
 
 import matplotlib
 from matplotlib import pyplot as plt
+
 from mbsn.human_trajectory_prediction.human_trajctory_prediction_model import simple_human_trajectory_prediction
 from mbsn.mdp.State import State
 from mbsn.mdp.agent import Agent
@@ -25,7 +26,7 @@ from mbsn.robot_human_environment.pygame_window import Window
 
 
 scenario = "small"
-scenario = "/home/adam/workspace/robulab/tmux/ros2_nav"
+scenario = "./src/mbsn/data/small"
 map = PolygonalMap(scenario, type="hexagon", area_minimum=0.1)
 robot_position = Point(0, 5)
 goal_position = Point(0, -5)
