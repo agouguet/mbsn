@@ -110,6 +110,8 @@ def heuristic_score_based(mdp, state, goal=None, w1=1.0, w2=1.5, w3=0.1, w4=1.0,
     
     actions = mdp.get_actions(state)
 
+    print(len(state.humans))
+
     if len(state.humans) == 0:
         cell_goal = mdp.get_state_from_continuous_position(goal)
         return closest_to_goal(mdp, state, cell_goal)
