@@ -136,6 +136,7 @@ class MBSNAgentMCTS:
         num_rollouts = 0
         while current_time < start_time + timeout:
             selected_node = root_node.select()
+            print(selected_node)
             if not self.mdp.is_terminal(selected_node.state):
                 child = selected_node.expand(self._heuristic_function)
                 reward = self.simulate(selected_node, child)
@@ -165,11 +166,14 @@ class MBSNAgentMCTS:
         list_actions.append(child_node.action)
 
         depth = 0
-        while not self.mdp.is_terminal(state):# and depth < 20:
+        while not self.mdp.is_terminal(state) and depth < 5:
             
             # Choose an action to execute
             action_deque_slice = deque(itertools.islice(list_actions, 0, len(list_actions)-1))
             action = self.choose(state, action_deque_slice)
+            if action == state.robot:
+                break
+            # print(state, action)
             list_actions.append(action)
             
             # Execute the action

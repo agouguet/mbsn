@@ -60,6 +60,10 @@ class Polygon():
     @property
     def polygon(self):
         return self._polygon
+    
+    @property
+    def centroid(self):
+        return self.polygon.centroid
 
     # def __getattr__(self, attr):
     #     # Delegate attribute access to the underlying polygon object

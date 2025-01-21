@@ -101,10 +101,9 @@ class MBSN(MDP):
                 break
 
         # Goal Reward
-        for polygon in self.polygons[state.robot]:
-            if polygon.intersects(self.goal.buffer(0.05)):
-                reward += REWARD_GOAL
-                break
+        # for polygon in self.polygons[state.robot]:
+        if self.polygons[state.robot].intersects(self.goal.buffer(0.05)):
+            reward += REWARD_GOAL
 
         return reward
 
@@ -115,9 +114,9 @@ class MBSN(MDP):
 
         if self.get_state_from_continuous_position(self.goal) == state.robot:
             return True
-        for polygon in self.polygons[state.robot]:
-            if polygon.intersects(self.goal.buffer(0.1)):
-                return True
+        # for polygon in self.polygons[state.robot]:
+        if self.polygons[state.robot].intersects(self.goal.buffer(0.1)):
+            return True
         return False
 
     """ Return the discount factor for this MDP """
@@ -137,4 +136,5 @@ class MBSN(MDP):
     
 
     def get_position_of_state(self, state):
+        return self.polygons[state].centroid
         return MultiPolygon([p.polygon for p in self.polygons[state]]).centroid

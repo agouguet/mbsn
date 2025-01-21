@@ -32,7 +32,7 @@ robot_position = Point(0, 5)
 goal_position = Point(0, -5)
 
 robot = Agent(robot_position)
-humans = [Agent(Point(0,0))]
+humans = [Agent(Point(0,0), orientation=90)]
 
 env = Environment(map, robot, humans, goal_position)
 
@@ -77,11 +77,13 @@ while robot.position != goal_position:
 
         # ACTION CHOICE
         # action = random.choice(mbsn.get_actions(state)) # Random
-        action = heuristic_score_based(mbsn, state, goal=mbsn_goal, debug=False, w2=5) # Heuristic
+        # action = heuristic_score_based(mbsn, state, goal=mbsn_goal, debug=False, w2=5) # Heuristic
 
-        # solver = MBSNAgentMCTS(mbsn, qfunction, bandit, heuristic_function=heuristic_score_based) # MCTS
-        # root_node, num_rollouts = solver.mcts(state, timeout=1.0)
-        # action, _ = root_node.get_value()
+        solver = MBSNAgentMCTS(mbsn, qfunction, bandit, heuristic_function=heuristic_score_based) # MCTS
+        print("Oui")
+        root_node, num_rollouts = solver.mcts(state, timeout=1.0)
+        print("Oui")
+        action, _ = root_node.get_value()
 
         # STEP
         env.step(map.grid[action].polygon.centroid)

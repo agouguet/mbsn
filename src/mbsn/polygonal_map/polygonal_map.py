@@ -9,7 +9,7 @@ import cv2
 from .map import Map
 from .polygon import Polygon
 
-POURCENTAGE_AREA_OF_POLYGON_ACCEPTABLE = 0.3
+POURCENTAGE_AREA_OF_POLYGON_ACCEPTABLE = 0.85
 
 
 class PolygonalMap(Map, Polygon):
@@ -48,7 +48,8 @@ class PolygonalMap(Map, Polygon):
         for c in range(len(contours)):
             poly = []
             for p in contours[c]:
-                n = tuple([p[0][0]* scale_factor + origin[0], p[0][1]* scale_factor + origin[1]])
+                n = tuple([p[0][0]* scale_factor + origin[0], -(p[0][1]* scale_factor + origin[1])])
+                plt.scatter(n[0], n[1])
                 vertices.append(Point(n[0], n[1]))
                 poly.append(n)
             if len(poly)>=4:
@@ -67,6 +68,8 @@ class PolygonalMap(Map, Polygon):
 
 
         Polygon.__init__(self, exterior, interiors)
+
+        plt.savefig("mygraph.png")
 
         return self._polygon
 
@@ -195,97 +198,5 @@ class PolygonalMap(Map, Polygon):
                                     hexagon.add_neighbor(neighbor)
             self._grid = grid
 
-        return self._grid
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def get_rooms(self, tolerance=1.0):
-        scenario = self.scenario
-        rooms={}
-        _, map_config = get_map_config(scenario)
-        _, map, segmented_map = load_map_and_segmented_map(scenario)
-        for i in np.unique(segmented_map)[1:-1]:
-            mask = (segmented_map == i) * np.uint8(1)
-            room = cv2.bitwise_and(map, map, mask= mask)
-            room = cv2.cvtColor(room.copy(), cv2.COLOR_BGR2GRAY)
-            _, poly, _ = image_to_polygon(room)
-            poly = poly.simplify(tolerance, preserve_topology=True)
-            poly = scale_polygon(poly, map_config)
-            if poly.is_valid:
-                room = NavRoom(poly)
-                rooms[room.id] = room
-
-        neighbors_pair = []
-        for id1, room1 in rooms.items():
-            for id2, room2 in rooms.items():
-                if id1 != id2 and (id1, id2) not in neighbors_pair:
-                    if room1.intersects(room2):
-                        neighbors_pair.append((id1, id2))
-                        neighbors_pair.append((id2, id1))
-                        room1.add_neighbor(room2)
-                        room2.add_neighbor(room1)
-        return rooms
-                
-    def create_test_grid(self, polygon, buffer_size=0.05):
-        grid = {}
-        id_to_id = defaultdict(list)
         
-        for id, cell in self.grid.items():
-            if polygon.intersects(cell.polygon):
-                inter = polygon.intersection(cell.polygon)
-                if isinstance(inter, MultiPolygon) or isinstance(inter, GeometryCollection):
-                    for poly in inter.geoms:
-                        if isinstance(poly, ShapelyPolygon) and polygon.intersects(poly) and poly.area >= 0.1:
-                            new_cell = Polygon(poly)
-                            grid[new_cell.id] = new_cell
-                            id_to_id[cell.id].append(new_cell.id)
-                elif isinstance(inter, ShapelyPolygon) and inter.area >= 0.1:
-                        new_cell = Polygon(inter)
-                        grid[new_cell.id] = new_cell
-                        id_to_id[cell.id].append(new_cell.id)
-
-        for _ ,ids in id_to_id.items():
-            if len(ids) > 1:
-                for id1 in ids:
-                    poly1 = grid[id1]
-                    for id2 in ids:
-                        if id1 != id2:
-                            poly2 = grid[id2]
-                            if poly1.polygon.buffer(0.01).intersects(poly2.polygon):
-                                poly1.add_neighbor(poly2)
-
-
-
-        for id, poly in self.grid.items():
-            for new_poly_id in id_to_id[id]:
-                new_poly = grid[new_poly_id]
-                for n in poly.neighbors:
-                    for new_poly_n_id in id_to_id[n.id]:
-                        new_poly_n = grid[new_poly_n_id]
-                        if new_poly.polygon.buffer(0.01).intersects(new_poly_n.polygon):
-                            new_poly.add_neighbor(new_poly_n)
-
-        return grid
+        return self._grid
