@@ -17,7 +17,7 @@ HEURISTIC_FUNCTIONS = [
     "social_heuristic",
 ]
 
-LIMIT_DISTANCE_TO_OTHER_AGENT = 1.5 # TODO CHANGE WITH HUMAN NUMBER
+LIMIT_DISTANCE_TO_OTHER_AGENT = 1.0 # TODO CHANGE WITH HUMAN NUMBER
 
 def random_function(mdp, state):
     return random.choice(mdp.get_actions(state))
